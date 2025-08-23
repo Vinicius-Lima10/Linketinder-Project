@@ -26,6 +26,7 @@ while(true) {
     }
     println "Pressione Enter para continuar"
     scanner.nextLine()
+
 }
 
 def listarCandidatos() {

@@ -1,5 +1,6 @@
 plugins {
     id 'groovy'
+    id 'application'
 }
 
 group = 'org.example'
@@ -13,6 +14,11 @@ dependencies {
     implementation 'org.apache.groovy:groovy:4.0.14'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+application {
+    // Troque pelo nome do pacote + classe que contém o método main
+    mainClass = 'Main'
 }
 
 test {
