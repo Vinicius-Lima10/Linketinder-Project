@@ -12,6 +12,6 @@ A proposta é criar uma aplicação simples, inspirada no **LinkedIn** e no **Ti
 2. Clone o repositório:  
    git clone https://github.com/Vinicius-Lima10/Linketinder-Project.git
 3. Entre na pasta do projeto:
-   cd Linketinder-Project
+   cd Linketinder-Project/src/main/groovy
 4. Rode o main:
-    groovy src/main/groovy/Main.groovy
+    groovy Main.groovy
