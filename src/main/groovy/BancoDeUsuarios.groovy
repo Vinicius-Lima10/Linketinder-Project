@@ -1,5 +1,23 @@
 class BancoDeUsuarios {
-static def candidatos = [
+        static def adicionarCandidato(Candidato candidato) {
+                candidatos.add(candidato);
+        }
+        static def adicionarEmpresa(Empresa empresa) {
+                empresas.add(empresa);
+        }
+        static def listarCandidatos() {
+                BancoDeUsuarios.candidatos.each{it.exibirPerfil()}
+        }
+        static def listarEmpresas() {
+                BancoDeUsuarios.empresas.each{it.exibirPerfil()}
+        }
+        static def removerCandidato(Candidato candidato) {
+                BancoDeUsuarios.candidatos.remove(candidato)
+        }
+        static def removerEmpresa(Empresa empresa) {
+                BancoDeUsuarios.empresas.remove(empresa)
+        }
+        static def candidatos = [
         new Candidato(
                 nome: "Laura Martins",
                 cpf: "123.456.789-00",
@@ -50,8 +68,8 @@ static def candidatos = [
                 descricao: "Gerente de projetos com experiência em metodologias ágeis.",
                 competencias: ["Scrum", "Kanban", "Jira", "Gestão de equipes"]
         )
-]
-static def empresas = [
+        ]
+        static def empresas = [
         new Empresa(
                 nome: "TechNova Solutions",
                 cnpj: "12.345.678/0001-90",
@@ -102,7 +120,7 @@ static def empresas = [
                 descricao: "Consultoria em gestão de projetos ágeis para empresas de tecnologia.",
                 competencias: ["Scrum", "Kanban", "Gestão de Projetos", "Jira"]
         )
-]
+        ]
 }
 
 
