@@ -11,7 +11,7 @@ class Empresa extends Pessoa {
     @Override
     void exibirPerfil() {
         println  """
-        Nome do candidato: $nome
+        Nome da empresa: $nome
         CNPJ: $cnpj
         Email corporativo: $email
         País: $pais

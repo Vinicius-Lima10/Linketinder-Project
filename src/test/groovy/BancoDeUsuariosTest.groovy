@@ -23,6 +23,7 @@ class BancoDeUsuariosTest {
         assertTrue(BancoDeUsuarios.candidatos.contains(candidato))
 
         BancoDeUsuarios.removerCandidato(candidato);
+
         assertEquals(tamanhoAntes, tamanhoDepois-1);
         assertFalse(BancoDeUsuarios.candidatos.contains(candidato));
     }

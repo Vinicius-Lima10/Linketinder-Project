@@ -31,7 +31,13 @@ while (true) {
             println "Digite o CPF:"
             def cpf = scanner.nextLine()
             println "Digite a idade:"
-            def idade = scanner.nextLine().toInteger()
+            def idade = 0
+            try {
+                idade = scanner.nextLine().toInteger()
+            } catch(Exception e) {
+                println "Idade inválida. Definindo 0."
+                idade = 0
+            }
             println "Digite o email:"
             def email = scanner.nextLine()
             println "Digite o estado:"
