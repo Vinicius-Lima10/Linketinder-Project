@@ -19,5 +19,7 @@ A proposta é criar uma aplicação simples, inspirada no **LinkedIn** e no **Ti
 ## Como executar o frontend
 1. Certifique-se de ter o Node.js instalado em sua máquina
 2. Entre na pasta Frontend após já ter clonado o repositório como indicado acima e rode o projeto
+   
    cd frontend
+
    npm start
