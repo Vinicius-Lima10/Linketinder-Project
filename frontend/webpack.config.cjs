@@ -1,0 +1,52 @@
+// const path = require('path');
+
+// module.exports = {
+//   entry: './src/index.ts',
+//   module: {
+//     rules: [
+//       {
+//         test: /\.ts$/,
+//         use: 'ts-loader',
+//         exclude: /node_modules/
+//       }
+//     ]
+//   },
+//   resolve: {
+//     extensions: [".ts", ".tsx", ".js"]
+//   },
+//   output: {
+//     filename: 'bundle.js',
+//     path: path.resolve(__dirname, 'dist')
+//   },
+//   devServer: {
+//     static: './dist',
+//     hot: true
+//   },
+//   mode: 'development'
+// };
+const path = require('path');
+
+module.exports = {
+  entry: './src/index.ts',
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
+      }
+    ]
+  },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js']
+  },
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  devServer: {
+    static: './dist',
+    hot: true
+  },
+  mode: 'development'
+};
