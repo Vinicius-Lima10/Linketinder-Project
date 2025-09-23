@@ -9,7 +9,6 @@ async function loadContent(url) {
     const container = document.getElementById('main-content');
     container.innerHTML = html;
 
-    // Campo de competências
     const competenciasInputEl = container.querySelector('#competencias');
     if (competenciasInputEl) {
       competenciasChoices = new Choices(competenciasInputEl, {
@@ -23,7 +22,6 @@ async function loadContent(url) {
       });
     }
 
-    // Campo de formação
     const formacaoInputEl = container.querySelector('#formacao');
     if (formacaoInputEl) {
       formacaoChoices = new Choices(formacaoInputEl, {
@@ -37,37 +35,118 @@ async function loadContent(url) {
       });
     }
 
-    // Formulário de candidato
-    const formCandidato = container.querySelector('#formCandidato');
-    if (formCandidato) {
-      formCandidato.addEventListener('submit', (e) => {
-        e.preventDefault();
-        cadastrarCandidatoS();
+const formCandidato = container.querySelector('#formCandidato');
+if (formCandidato) {
+  formCandidato.addEventListener('submit', (e) => {
+    e.preventDefault()
 
-        // reset normal
-        formCandidato.reset();
+    // limpa erros
+    formCandidato.querySelectorAll(".form-control").forEach((input) => {
+      limparErro(input)
+    });
 
-        // limpar os Choices
-        if (competenciasChoices) competenciasChoices.clearStore();
-        if (formacaoChoices) formacaoChoices.clearStore();
-      });
+    try {
+      cadastrarCandidatoS()
+      formCandidato.reset()
+
+      if (competenciasChoices) competenciasChoices.clearStore()
+      if (formacaoChoices) formacaoChoices.clearStore()
+
+    } catch (err) {
+      const mensagem = err.message;
+      console.log(mensagem)
+
+      if (mensagem.includes("Nome")) {
+        const input = document.getElementById("nomeCandidato")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("CPF")) {
+        const input = document.getElementById("cpf")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("E-mail")) {
+        const input = document.getElementById("email")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("Telefone")) {
+        const input = document.getElementById("telefone")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("LinkedIn")) {
+        const input = document.getElementById("linkedin")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("CEP")) {
+        const input = document.getElementById("cep")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("Competência")) {
+        const input = document.getElementById("competencias")
+        if (input) setErro(input, mensagem)
+      }
     }
+  });
+}
 
-    // Formulário de empresa
-    const formEmpresa = container.querySelector('#formEmpresa');
-    if (formEmpresa) {
-      formEmpresa.addEventListener('submit', (e) => {
-        e.preventDefault();
-        cadastrarEmpresaS();
 
-        formEmpresa.reset();
-        if (competenciasChoices) competenciasChoices.clearStore();
 
-      });
+const formEmpresa = container.querySelector('#formEmpresa')
+if (formEmpresa) {
+  formEmpresa.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    // Limpar erros antes da validação
+    formEmpresa.querySelectorAll(".form-control").forEach((input) => {
+      limparErro(input);
+    });
+
+    try {
+      const empresa = {
+        nome: document.getElementById("nomeEmpresa").value,
+        cnpj: document.getElementById("cnpj").value,
+        email: document.getElementById("email").value,
+        pais: document.getElementById("pais").value,
+        estado: document.getElementById("estado").value,
+        cep: document.getElementById("cep").value,
+        descricao: document.getElementById("descricao").value,
+        competencias: competenciasChoices ? competenciasChoices.getValue(true) : [],
+      };
+
+      cadastrarEmpresaS(empresa);
+
+      formEmpresa.reset();
+      if (competenciasChoices) competenciasChoices.clearStore();
+
+    } catch (err) {
+      const mensagem = err.message;
+
+      console.log(mensagem)
+
+      if (mensagem.includes("Nome")) {
+        const input = document.getElementById("nomeEmpresa")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("CNPJ")) {
+        const input = document.getElementById("cnpj")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("E-mail")) {
+        const input = document.getElementById("email")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("CEP")) {
+        const input = document.getElementById("cep")
+        if (input) setErro(input, mensagem)
+      }
+      if (mensagem.includes("Competência")) {
+        const input = document.getElementById("competencias")
+        if (input) setErro(input, mensagem)
+      }
     }
+  });
+}
 
-    // Formulário de vagas
-    const formVagas = container.querySelector('#formVagas');
+    const formVagas = container.querySelector('#formVagas')
     if (formVagas) {
       formVagas.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -80,27 +159,60 @@ async function loadContent(url) {
     }
 
     // Tabelas
-    const tabelaCandidatos = container.querySelector('#tabelaCandidatos');
+    const tabelaCandidatos = container.querySelector('#tabelaCandidatos')
     if (tabelaCandidatos) {
       mostrarCandidatosAnonimos();
     }
 
-    const tabelaVagas = container.querySelector('#tabelaVagas');
+    const tabelaVagas = container.querySelector('#tabelaVagas')
     if (tabelaVagas) {
-      listarVagas();
+      listarVagas()
     }
 
   } catch (err) {
-    console.error('Erro ao carregar conteúdo', url, err);
+    console.error('Erro ao carregar conteúdo', url, err)
   }
 }
 
-// Navegação SPA com data-link
+
 document.addEventListener('click', function(e) {
-  const link = e.target.closest('[data-link]');
+  const link = e.target.closest('[data-link]')
   if (!link) return;      
 
   e.preventDefault();          
-  const url = link.getAttribute('data-link');
+  const url = link.getAttribute('data-link')
   loadContent(url);           
 });
+
+
+
+
+function setErro(input, mensagem) {
+  // Se for um campo gerenciado pelo Choices
+  const choicesContainer = input.closest(".col-sm-10")?.querySelector(".choices")
+  if (choicesContainer) {
+    choicesContainer.classList.add("is-invalid")
+  } else {
+    input.classList.add("is-invalid")
+  }
+
+  const feedback = input.closest(".col-sm-10")?.querySelector(".invalid-feedback")
+  if (feedback) {
+    feedback.textContent = mensagem;
+  }
+}
+
+function limparErro(input) {
+  // Se for um campo gerenciado pelo Choices
+  const choicesContainer = input.closest(".col-sm-10")?.querySelector(".choices")
+  if (choicesContainer) {
+    choicesContainer.classList.remove("is-invalid")
+  } else {
+    input.classList.remove("is-invalid")
+  }
+
+  const feedback = input.closest(".col-sm-10")?.querySelector(".invalid-feedback")
+  if (feedback) {
+    feedback.textContent = ""
+  }
+}

@@ -12,6 +12,8 @@ export function cadastrarCandidatoS() {
       cep: (document.getElementById("cep") as HTMLInputElement).value,
       descricao: (document.getElementById("descricao") as HTMLInputElement).value,
       formacao: (document.getElementById("formacao") as HTMLInputElement).value,
+      telefone: (document.getElementById("telefone") as HTMLInputElement).value,
+      linkedin: (document.getElementById("linkedin") as HTMLInputElement).value,
       competencias: (document.getElementById("competencias") as HTMLInputElement)
         .value.split(",").map(c => c.trim())
     }

@@ -7,5 +7,7 @@ export type Candidato = {
     cep: string
     descricao: string
     formacao: string
+    telefone: string
+    linkedin: string
     competencias: string[]
 }

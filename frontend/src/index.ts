@@ -8,3 +8,4 @@ import { cadastrarVagaS, listarVagasS } from "./services/VagaService";
 (window as any).mostrarCandidatosAnonimos = mostrarCandidatosAnonimos;
 (window as any).cadastrarVaga = cadastrarVagaS;
 (window as any).listarVagas = listarVagasS
+

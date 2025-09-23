@@ -7,13 +7,15 @@
             <label for="nomeCandidato" class="col-sm-2 col-form-label">Nome</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="nomeCandidato" name="nome" placeholder="Digite seu nome" required>
+                <div id="nomefeed"  class="invalid-feedback">Nome inválido</div>
             </div>
             </div>
 
             <div class="row mb-3">
             <label for="cpf" class="col-sm-2 col-form-label">CPF</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" required>
+                <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00" required>   
+                <div id="cpffeed" class="invalid-feedback">CPF inválido</div>
             </div>
             </div>
 
@@ -21,6 +23,7 @@
             <label for="idade" class="col-sm-2 col-form-label">Idade</label>
             <div class="col-sm-10">
                 <input type="number" class="form-control" id="idade" name="idade" placeholder="Ex: 25" min="16" required>
+                <div id="idadefeed" class="invalid-feedback">Idade inválida</div>
             </div>
             </div>
 
@@ -28,6 +31,7 @@
             <label for="email" class="col-sm-2 col-form-label">Email</label>
             <div class="col-sm-10">
                 <input type="email" class="form-control" id="email" name="email" placeholder="exemplo@email.com" required>
+                <div id="emailfeed" class="invalid-feedback">Email inválido</div>
             </div>
             </div>
 
@@ -72,9 +76,25 @@
             <label for="cep" class="col-sm-2 col-form-label">CEP</label>
             <div class="col-sm-10">
                 <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" required>
+                <div id="cepfeed"  class="invalid-feedback">CEP inválido</div>
             </div>
             </div>
 
+            <div class="row mb-3">
+            <label for="telefone" class="col-sm-2 col-form-label">Telefone</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00)00000-0000" required>
+                <div id="telefone"  class="invalid-feedback"></div>
+            </div>
+            </div>
+
+            <div class="row mb-3">
+            <label for="cep" class="col-sm-2 col-form-label">LinkedIn</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="linkedin" name="linkedin" placeholder="" required>
+                <div id="linkedin"  class="invalid-feedback"></div>
+            </div>
+            </div>
 
             <div class="row mb-3">
             <label for="descricao" class="col-sm-2 col-form-label">Descrição</label>
@@ -83,11 +103,11 @@
             </div>
             </div>
 
-
             <div class="row mb-3">
             <label for="competencias" class="col-sm-2 col-form-label">Competências</label>
             <div class="col-sm-10">
                 <input id="competencias" type="text" name="competencias" multiple></select>
+                <div class="invalid-feedback"></div>
             </div>
             </div>
 
@@ -95,6 +115,7 @@
             <label for="formacao" class="col-sm-2 col-form-label">Formacao</label>
             <div class="col-sm-10">
                 <input id="formacao" type="text" name="formacao" multiple></select>
+                <div class="invalid-feedback"></div>
             </div>
             </div>
             
