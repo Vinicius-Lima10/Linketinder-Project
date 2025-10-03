@@ -23,3 +23,5 @@ A proposta é criar uma aplicação simples, inspirada no **LinkedIn** e no **Ti
    cd frontend
 
    npm start
+
+<img width="1596" height="1051" alt="Untitled" src="https://github.com/user-attachments/assets/345188a6-2cd0-4fc1-a125-75ee74c92da3" />
