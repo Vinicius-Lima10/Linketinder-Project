@@ -11,6 +11,7 @@ export function cadastrarEmpresaS() : void {
       nome: (document.getElementById("nomeEmpresa") as HTMLInputElement).value,
       cnpj: (document.getElementById("cnpj") as HTMLInputElement).value,
       email: (document.getElementById("email") as HTMLInputElement).value,
+      senha: (document.getElementById("password") as HTMLInputElement).value,
       pais: (document.getElementById("pais") as HTMLInputElement).value,
       estado: (document.getElementById("estado") as HTMLInputElement).value,
       cep: (document.getElementById("cep") as HTMLInputElement).value,

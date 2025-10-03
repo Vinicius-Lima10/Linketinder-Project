@@ -1,6 +1,7 @@
 export type Empresa = {
     nome: string
     cnpj: string
+    senha: string
     email: string
     pais: string
     estado: string

@@ -60,10 +60,15 @@ if (formCandidato) {
         const input = document.getElementById("nomeCandidato")
         if (input) setErro(input, mensagem)
       }
-      if (mensagem.includes("CPF")) {
-        const input = document.getElementById("cpf")
+
+      if (mensagem.includes("Sobrenome")) {
+        const input = document.getElementById("sobrenomeCandidato")
         if (input) setErro(input, mensagem)
       }
+        if (mensagem.includes("Data")) {
+          const input = document.getElementById("cpf")
+          if (input) setErro(input, mensagem)
+        }
       if (mensagem.includes("E-mail")) {
         const input = document.getElementById("email")
         if (input) setErro(input, mensagem)

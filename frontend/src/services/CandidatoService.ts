@@ -5,10 +5,13 @@ export function cadastrarCandidatoS() {
 
     const candidato: Candidato = {
       nome: (document.getElementById("nomeCandidato") as HTMLInputElement).value,
-      cpf: (document.getElementById("cpf") as HTMLInputElement).value,
-      idade: Number((document.getElementById("idade") as HTMLInputElement).value),
+      sobrenome: (document.getElementById("sobrenomeCandidato") as HTMLInputElement).value.trim(),
+      cpf: (document.getElementById("cpf") as HTMLInputElement).value.trim(),
+      data_de_nascimento: (document.getElementById("dataNascimento") as HTMLInputElement).value,      idade: Number((document.getElementById("idade") as HTMLInputElement).value),
       email: (document.getElementById("email") as HTMLInputElement).value,
+      senha: (document.getElementById("password") as HTMLInputElement).value,
       estado: (document.getElementById("estado") as HTMLInputElement).value,
+      pais: (document.getElementById("pais") as HTMLInputElement).value,
       cep: (document.getElementById("cep") as HTMLInputElement).value,
       descricao: (document.getElementById("descricao") as HTMLInputElement).value,
       formacao: (document.getElementById("formacao") as HTMLInputElement).value,
