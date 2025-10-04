@@ -1,12 +1,14 @@
+import groovy.transform.ToString
+@ToString(includeNames = true)
 class Empresa extends Pessoa {
     String nome
     String cnpj
     String email
+    String senha
     String pais
     String estado
     String cep
     String descricao
-    List<String> competencias
 
     @Override
     void exibirPerfil() {
@@ -18,7 +20,8 @@ class Empresa extends Pessoa {
         Estado: $estado
         CEP: $cep
         Descrição da empresa: $descricao
-        Competências buscadas: ${competencias.join(',')}
+        
         """
+//        Competências buscadas: ${competencias.join(',')}
     }
 }

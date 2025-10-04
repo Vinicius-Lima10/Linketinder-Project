@@ -4,5 +4,5 @@ abstract class Pessoa implements IPessoa {
     String estado
     String cep
     String descricao
-    List<String> competencias
+//    List<String> competencias
 }
