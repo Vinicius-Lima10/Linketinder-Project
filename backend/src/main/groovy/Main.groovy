@@ -1,4 +1,5 @@
 import java.util.Scanner
+import java.time.LocalDate
 
 println "Bem-vindo ao Linketinder"
 def scanner = new Scanner(System.in)
@@ -26,8 +27,14 @@ while (true) {
             BancoDeUsuarios.listarEmpresas()
             break
         case '3':
-            println "Digite o nome do candidato:"
+            println "Digite o nome:"
             def nome = scanner.nextLine()
+            println "Digite o sobrenome:"
+            def sobrenome = scanner.nextLine()
+            println "Digite a data de nascimento (AAAA-MM-DD):"
+            def data_de_nascimento = scanner.nextLine()
+            println "Defina a senha:"
+            def senha = scanner.nextLine()
             println "Digite o CPF:"
             def cpf = scanner.nextLine()
             println "Digite a idade:"
@@ -42,17 +49,26 @@ while (true) {
             def email = scanner.nextLine()
             println "Digite o estado:"
             def estado = scanner.nextLine()
+            println "Digite o país:"
+            def pais = scanner.nextLine()
             println "Digite o CEP:"
             def cep = scanner.nextLine()
             println "Digite a descrição:"
             def descricao = scanner.nextLine()
-            println "Digite competências separadas por vírgula:"
+            println "Digite o telefone:"
+            def telefone = scanner.nextLine()
+            println "Digite a(s) formação(ões) separada(s) por vírgula:"
+            def formacao = scanner.nextLine().split(",")*.trim()
+            println "Digite as competências separadas por vírgula:"
             def competencias = scanner.nextLine().split(",")*.trim()
+            println "Digite o link do LinkedIn:"
+            def linkedin = scanner.nextLine()
 
             def candidato = new Candidato(
-                    nome: nome, cpf: cpf, idade: idade, email: email,
-                    estado: estado, cep: cep, descricao: descricao,
-                    competencias: competencias
+                    nome: nome, sobrenome: sobrenome, data_de_nascimento: data_de_nascimento,
+                    senha: senha, cpf: cpf, idade: idade, email: email, estado: estado,
+                    pais: pais, cep: cep, descricao: descricao, telefone: telefone,
+                    formacao: formacao, competencias: competencias, linkedin: linkedin
             )
             BancoDeUsuarios.adicionarCandidato(candidato)
             println "Candidato adicionado com sucesso!"
@@ -75,6 +91,8 @@ while (true) {
             def cnpj = scanner.nextLine()
             println "Digite o email:"
             def email = scanner.nextLine()
+            println "Defina a senha:"
+            def senha = scanner.nextLine()
             println "Digite o país:"
             def pais = scanner.nextLine()
             println "Digite o estado:"
@@ -83,16 +101,14 @@ while (true) {
             def cep = scanner.nextLine()
             println "Digite a descrição:"
             def descricao = scanner.nextLine()
-            println "Digite competências separadas por vírgula:"
-            def competencias = scanner.nextLine().split(",")*.trim()
+
 
             def empresa = new Empresa(
-                    nome: nome, cnpj: cnpj, email: email, pais: pais,
-                    estado: estado, cep: cep, descricao: descricao,
-                    competencias: competencias
+                    nome: nome, cnpj: cnpj, email: email, senha: senha, pais: pais,
+                    estado: estado, cep: cep, descricao: descricao
             )
             BancoDeUsuarios.adicionarEmpresa(empresa)
-            println "✅ Empresa adicionada com sucesso!"
+            println "Empresa adicionada com sucesso!"
             break
         case '6':
             println "Digite o CNPJ da empresa a remover:"
@@ -100,16 +116,16 @@ while (true) {
             def empresa = BancoDeUsuarios.empresas.find { it.cnpj == cnpj }
             if (empresa) {
                 BancoDeUsuarios.removerEmpresa(empresa)
-                println "✅ Empresa removida com sucesso!"
+                println "Empresa removida com sucesso!"
             } else {
-                println "⚠️ Nenhuma empresa encontrada com esse CNPJ."
+                println "⚠Nenhuma empresa encontrada com esse CNPJ."
             }
             break
         case '0':
             println "Encerrando o programa..."
             return
         default:
-            println "❌ Opção inválida, tente novamente..."
+            println "Opção inválida, tente novamente..."
             break
     }
 
