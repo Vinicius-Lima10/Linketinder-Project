@@ -6,9 +6,11 @@ export function cadastrarCandidato(candidato: Candidato): void {
   if (!candidato.nome.match(/^[A-Za-zÀ-ÿ\s'\-]{2,50}$/)) {
     throw new Error("Nome inválido");
   }
-    if (!candidato.sobrenome.match(/^[A-Za-zÀ-ÿ\s'\-]{2,50}$/)) {
-        throw new Error("Sobrenome inválido");
-      }
+
+  if (!candidato.sobrenome.match(/^[A-Za-zÀ-ÿ\s'\-]{2,50}$/)) {
+    throw new Error("Sobrenome inválido");
+  }
+
   if (!candidato.cpf.match(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/)) {
     throw new Error("CPF inválido. Use o formato 000.000.000-00");
   }
@@ -39,8 +41,6 @@ export function cadastrarCandidato(candidato: Candidato): void {
 
   candidatos.push(candidato);
 }
-
-
 
 export function listarCandidatos(): Candidato[] {
   return candidatos;
