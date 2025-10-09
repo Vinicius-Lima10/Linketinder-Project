@@ -64,7 +64,7 @@ class CandidatoDAO {
 
     void atualizarCampo(int id, String campo, Object novoValor) {
         sql.executeUpdate("UPDATE Candidato SET ${campo} = ? WHERE id = ?", [novoValor, id])
-        println "✏ Campo '${campo}' atualizado com sucesso"
+        println "Campo '${campo}' atualizado com sucesso"
     }
 
     void deletar(int id) {
