@@ -35,5 +35,5 @@ test {
 }
 
 run {
-    standardInput = System.in
+    standardInput = System.in   //poderia ser um arquivo com todas as entradas
 }

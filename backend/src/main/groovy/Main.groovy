@@ -7,16 +7,22 @@ def scanner = new Scanner(System.in)
 while (true) {
     println """
     =============Menu=============
-    [1] Listar todos os candidatos
-    [2] Listar todas as empresas
+    [1] Listar candidatos
+    [2] Listar empresas
     [3] Adicionar candidato
     [4] Remover candidato
     [5] Adicionar empresa
     [6] Remover empresa
+    [7] Candidato curte vaga
+    [8] Empresa curte candidato
+    [9] Listar curtidas
+    [10] Criar vaga
+    [11] Listar vagas
     [0] Sair
     ==============================
 """
-    print "Escolha uma opção: "
+
+    println "Escolha uma opção: "
     def opcao = scanner.nextLine()
 
     switch (opcao) {
@@ -120,6 +126,87 @@ while (true) {
             } else {
                 println "⚠Nenhuma empresa encontrada com esse CNPJ."
             }
+            break
+        case '7':
+            println "Digite o CPF do candidato:"
+            def cpf = scanner.nextLine()
+            def candidato = BancoDeUsuarios.candidatos.find { it.cpf == cpf }
+
+            if (!candidato) {
+                println "Candidato não encontrado."
+                break
+            }
+
+            println "Digite o nome da vaga que ele quer curtir:"
+            def nomeVaga = scanner.nextLine()
+            def vaga = BancoDeVagas.vagas.find { it.nome == nomeVaga }
+
+            if (!vaga) {
+                println "Vaga não encontrada."
+                break
+            }
+
+            GerenciadorDeCurtidas.candidatoCurteVaga(candidato, vaga)
+            break
+
+        case '8':
+            println "Digite o CNPJ da empresa:"
+            def cnpj = scanner.nextLine()
+            def empresa = BancoDeUsuarios.empresas.find { it.cnpj == cnpj }
+
+            if (!empresa) {
+                println "Empresa não encontrada."
+                break
+            }
+
+            println "Digite o CPF do candidato que a empresa curtiu:"
+            def cpfCandidato = scanner.nextLine()
+            def candidato = BancoDeUsuarios.candidatos.find { it.cpf == cpfCandidato }
+
+            println "Digite o nome da vaga relacionada:"
+            def nomeVaga = scanner.nextLine()
+            def vaga = BancoDeVagas.vagas.find { it.nome == nomeVaga }
+
+            GerenciadorDeCurtidas.empresaCurteCandidato(empresa, candidato, vaga)
+            break
+
+        case '9':
+            GerenciadorDeCurtidas.listarCurtidas()
+            break
+        case '10':
+            println "Digite o nome da vaga:"
+            def nome = scanner.nextLine()
+            println "Digite a descrição da vaga:"
+            def descricao = scanner.nextLine()
+            println "Digite o endereço:"
+            def endereco = scanner.nextLine()
+            println "Digite a cidade:"
+            def cidade = scanner.nextLine()
+            println "Digite o estado:"
+            def estado = scanner.nextLine()
+            println "Digite o país:"
+            def pais = scanner.nextLine()
+            println "Digite o ID da empresa responsável (ou 0 se desconhecido):"
+            def empresaId = scanner.nextLine().toInteger()
+            println "Digite as competências da vaga (separadas por vírgula):"
+            def competencias = scanner.nextLine().split(",")*.trim()
+
+            def vaga = new Vagas(
+                    nome: nome,
+                    descricao: descricao,
+                    endereco: endereco,
+                    cidade: cidade,
+                    estado: estado,
+                    pais: pais,
+                    empresa_id: empresaId,
+                    competencias: competencias
+            )
+            BancoDeVagas.adicionarVaga(vaga)
+            println "Vaga criada com sucesso!"
+            break
+
+        case '11':
+            BancoDeVagas.listarVagas()
             break
         case '0':
             println "Encerrando o programa..."

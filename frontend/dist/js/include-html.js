@@ -193,7 +193,6 @@ document.addEventListener('click', function(e) {
 
 
 function setErro(input, mensagem) {
-  // Se for um campo gerenciado pelo Choices
   const choicesContainer = input.closest(".col-sm-10")?.querySelector(".choices")
   if (choicesContainer) {
     choicesContainer.classList.add("is-invalid")
@@ -208,7 +207,6 @@ function setErro(input, mensagem) {
 }
 
 function limparErro(input) {
-  // Se for um campo gerenciado pelo Choices
   const choicesContainer = input.closest(".col-sm-10")?.querySelector(".choices")
   if (choicesContainer) {
     choicesContainer.classList.remove("is-invalid")
