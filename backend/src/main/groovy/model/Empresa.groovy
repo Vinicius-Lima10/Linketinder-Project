@@ -22,6 +22,5 @@ class Empresa extends Pessoa {
         Descrição da empresa: $descricao
         
         """
-//        Competências buscadas: ${competencias.join(',')}
     }
 }
