@@ -11,23 +11,31 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.apache.groovy:groovy:4.0.14'
-
+    implementation 'org.apache.groovy:groovy-all:4.0.14'
     implementation 'org.apache.groovy:groovy-sql:4.0.14'
-
     implementation 'org.postgresql:postgresql:42.7.3'
 
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params'
-    testImplementation 'org.junit.platform:junit-platform-suite:1.10.0'
-
+    testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
     testImplementation 'org.mockito:mockito-core:5.14.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.14.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 application {
     mainClass = 'Main'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+    test {
+        groovy {
+            srcDirs = ['src/test/groovy']
+        }
+    }
 }
 
 test {
@@ -35,5 +43,5 @@ test {
 }
 
 run {
-    standardInput = System.in   //poderia ser um arquivo com todas as entradas
+    standardInput = System.in
 }

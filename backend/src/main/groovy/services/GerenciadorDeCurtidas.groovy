@@ -1,3 +1,10 @@
+package services
+
+import model.Candidato
+import model.Curtida
+import model.Empresa
+import model.Vagas
+
 class GerenciadorDeCurtidas {
     static List<Curtida> curtidas = []
 

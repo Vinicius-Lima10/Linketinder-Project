@@ -1,14 +1,20 @@
+package dao
+
 import groovy.sql.Sql
+import interfaces.IGenericDAO
+import model.Empresa
+
 import java.sql.SQLException
 
-class EmpresaDAO {
+class EmpresaDAO implements IGenericDAO<Empresa> {
     Sql sql
 
     EmpresaDAO(Sql sql) {
         this.sql = sql
     }
 
-    void inserir(Empresa e) {
+    @Override
+    def inserir(Empresa e) {
         try {
             sql.execute """
                 INSERT INTO empresas (nome, cnpj, email, senha, pais, estado, cep, descricao)
@@ -20,11 +26,13 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     List<Empresa> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM empresas")
             return rows.collect { row ->
                 new Empresa(
+                        id: row.id,
                         nome: row.nome,
                         cnpj: row.cnpj,
                         email: row.email,
@@ -41,6 +49,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     void atualizarCampo(int id, String campo, Object novoValor) {
         try {
             def camposPermitidos = ["nome", "cnpj", "email", "senha", "pais", "estado", "cep", "descricao"]
@@ -54,6 +63,7 @@ class EmpresaDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         try {
             int removidos = sql.executeUpdate("DELETE FROM empresas WHERE id = ?", [id])

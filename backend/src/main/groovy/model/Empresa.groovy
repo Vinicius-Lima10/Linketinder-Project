@@ -1,6 +1,9 @@
+package model
+
 import groovy.transform.ToString
 @ToString(includeNames = true)
 class Empresa extends Pessoa {
+    Integer id
     String nome
     String cnpj
     String email

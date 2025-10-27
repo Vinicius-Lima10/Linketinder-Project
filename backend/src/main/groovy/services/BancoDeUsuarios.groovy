@@ -1,3 +1,8 @@
+package services
+
+import model.Candidato
+import model.Empresa
+
 import java.time.LocalDate
 
 class BancoDeUsuarios {

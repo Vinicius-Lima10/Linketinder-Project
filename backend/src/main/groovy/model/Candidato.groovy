@@ -1,6 +1,8 @@
+package model
 import groovy.transform.ToString
 @ToString(includeNames = true)
 class Candidato extends Pessoa {
+    Integer id
     String nome
     String sobrenome
     String data_de_nascimento

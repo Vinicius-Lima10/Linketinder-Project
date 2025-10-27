@@ -1,13 +1,19 @@
+package dao
+
 import groovy.sql.Sql
+import interfaces.IGenericDAO
+import model.Competencias
+
 import java.sql.SQLException
 
-class CompetenciasDAO {
+class CompetenciasDAO implements IGenericDAO<Competencias> {
     Sql sql
 
     CompetenciasDAO(Sql sql) {
         this.sql = sql
     }
 
+    @Override
     def inserir(Competencias c) {
         try {
             def keys = sql.executeInsert("INSERT INTO competencias (nome) VALUES (?)", [c.nome])
@@ -15,10 +21,10 @@ class CompetenciasDAO {
             return keys[0][0]
         } catch (Exception ex) {
             println "Erro ao inserir competência '${c?.nome}': ${ex.message}"
-            return null
         }
     }
 
+    @Override
     List<Competencias> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM competencias")
@@ -31,6 +37,7 @@ class CompetenciasDAO {
         }
     }
 
+    @Override
     void atualizarCampo(int id, String campo, Object novoValor) {
         try {
             def camposPermitidos = ["nome"]
@@ -45,6 +52,7 @@ class CompetenciasDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         try {
             int removidos = sql.executeUpdate("DELETE FROM competencias WHERE id = ?", [id])

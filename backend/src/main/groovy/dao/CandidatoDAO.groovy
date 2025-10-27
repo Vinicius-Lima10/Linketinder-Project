@@ -1,34 +1,47 @@
-import groovy.sql.Sql
-import java.sql.Date
-import java.sql.SQLException
+package dao
 
-class CandidatoDAO {
+import groovy.sql.Sql
+import interfaces.IGenericDAO
+import model.Candidato
+import services.AssociacaoService
+
+import java.sql.Date
+
+class CandidatoDAO implements IGenericDAO<Candidato> {
     Sql sql
     FormacaoDAO formacaoDAO
     CompetenciasDAO competenciasDAO
+    AssociacaoService associacaoService
 
     CandidatoDAO(Sql sql) {
         this.sql = sql
         this.formacaoDAO = new FormacaoDAO(sql)
         this.competenciasDAO = new CompetenciasDAO(sql)
+        this.associacaoService = new AssociacaoService(sql)
     }
 
-    void inserir(Candidato c) {
+    @Override
+    def inserir(Candidato c) {
         try {
-            def candidatoId = inserirCandidato(c)
-            associarFormacoes(candidatoId, c.formacao)
-            associarCompetencias(candidatoId, c.competencias)
-            println "Candidato '${c.nome}' inserido com sucesso"
-        } catch (SQLException e) {
-            println "Erro ao inserir candidato '${c.nome}': ${e.message}"
+            int candidatoId = inserirCandidato(c)
+
+            associacaoService.associarFormacoes("formacaocandidato", "candidato_id", candidatoId, c.formacao)
+            associacaoService.associarCompetencias("candidatocompetencias", "candidato_id", candidatoId, c.competencias)
+            println "Candidato '${c.nome}' inserido com sucesso."
+        } catch (Exception ex) {
+            println "Erro ao inserir candidato '${c.nome}': ${ex.message}"
+            throw ex
         }
     }
 
+    @Override
     List<Candidato> listarTodos() {
         try {
-            def rows = sql.rows("SELECT * FROM Candidato")
+            def rows = sql.rows("SELECT * FROM candidato")
+
             return rows.collect { r ->
                 new Candidato(
+                        id: r.id,
                         nome: r.nome,
                         sobrenome: r.sobrenome,
                         data_de_nascimento: r.data_de_nascimento?.toString(),
@@ -44,12 +57,13 @@ class CandidatoDAO {
                         linkedin: r.linkedin
                 )
             }
-        } catch (SQLException e) {
-            println "Erro ao listar candidatos: ${e.message}"
+        } catch (Exception ex) {
+            println "Erro ao listar candidatos: ${ex.message}"
             return []
         }
     }
 
+    @Override
     void atualizarCampo(int id, String campo, Object novoValor) {
         try {
             def camposValidos = [
@@ -60,26 +74,25 @@ class CandidatoDAO {
                 throw new IllegalArgumentException("Campo inválido: $campo")
             }
 
-            sql.executeUpdate("UPDATE Candidato SET ${campo} = ? WHERE id = ?", [novoValor, id])
-            println "Campo '${campo}' atualizado com sucesso (ID: $id)"
-        } catch (IllegalArgumentException e) {
-            println "${e.message}"
-        } catch (SQLException e) {
-            println "Erro ao atualizar candidato ID ${id}: ${e.message}"
+            sql.executeUpdate("UPDATE candidato SET ${campo} = ? WHERE id = ?", [novoValor, id])
+            println "Campo '${campo}' atualizado com sucesso (ID: $id)."
+        } catch (Exception ex) {
+            println "Erro ao atualizar candidato ID ${id}: ${ex.message}"
         }
     }
 
+    @Override
     void deletar(int id) {
         try {
-            sql.execute("DELETE FROM Candidato WHERE id = ?", [id])
-            println "Candidato ID ${id} removido com sucesso!"
-        } catch (SQLException e) {
-            println "Erro ao remover candidato ID ${id}: ${e.message}"
+            sql.execute("DELETE FROM candidato WHERE id = ?", [id])
+            println "Candidato ID ${id} removido com sucesso."
+        } catch (Exception ex) {
+            println "Erro ao remover candidato ID ${id}: ${ex.message}"
         }
     }
 
-    private Long inserirCandidato(Candidato c) {
-        sql.executeInsert("""
+    private int inserirCandidato(Candidato c) {
+        def keys = sql.executeInsert("""
             INSERT INTO candidato 
             (nome, sobrenome, data_de_nascimento, senha, cpf, idade, email, estado, pais, cep, descricao, telefone, linkedin)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -97,34 +110,7 @@ class CandidatoDAO {
                 c.descricao,
                 c.telefone,
                 c.linkedin
-        ])[0][0]
-    }
-
-    private void associarFormacoes(Long candidatoId, List<String> formacoes) {
-        formacoes?.each { f ->
-            def fId = sql.firstRow("SELECT id FROM formacoes WHERE nome = ?", [f])?.id
-            if (!fId) {
-                formacaoDAO.inserir(new Formacao(nome: f))
-                fId = sql.firstRow("SELECT id FROM formacoes WHERE nome = ?", [f]).id
-            }
-            sql.executeInsert(
-                    "INSERT INTO formacaocandidato (candidato_id, formacao_id) VALUES (?, ?)",
-                    [candidatoId, fId]
-            )
-        }
-    }
-
-    private void associarCompetencias(Long candidatoId, List<String> competencias) {
-        competencias?.each { comp ->
-            def compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [comp])?.id
-            if (!compId) {
-                competenciasDAO.inserir(new Competencias(nome: comp))
-                compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [comp]).id
-            }
-            sql.executeInsert(
-                    "INSERT INTO candidatocompetencias (candidato_id, competencia_id) VALUES (?, ?)",
-                    [candidatoId, compId]
-            )
-        }
+        ])
+        return keys[0][0]
     }
 }

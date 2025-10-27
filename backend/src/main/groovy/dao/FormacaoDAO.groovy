@@ -1,13 +1,19 @@
+package dao
+
 import groovy.sql.Sql
+import interfaces.IGenericDAO
+import model.Formacao
+
 import java.sql.SQLException
 
-class FormacaoDAO {
+class FormacaoDAO implements IGenericDAO<Formacao> {
     Sql sql
 
     FormacaoDAO(Sql sql) {
         this.sql = sql
     }
 
+    @Override
     def inserir(Formacao f) {
         try {
             def keys = sql.executeInsert("INSERT INTO formacoes (nome) VALUES (?)", [f.nome])
@@ -19,6 +25,7 @@ class FormacaoDAO {
         }
     }
 
+    @Override
     List<Formacao> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM formacoes")
@@ -31,6 +38,7 @@ class FormacaoDAO {
         }
     }
 
+    @Override
     void atualizarCampo(int id, String campo, Object novoValor) {
         try {
             def camposPermitidos = ["nome"]
@@ -44,6 +52,7 @@ class FormacaoDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         try {
             int removidos = sql.executeUpdate("DELETE FROM formacoes WHERE id = ?", [id])

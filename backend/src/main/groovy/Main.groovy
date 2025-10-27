@@ -1,3 +1,7 @@
+import model.Candidato
+import model.Empresa
+import model.Vagas
+
 import java.util.Scanner
 import java.time.LocalDate
 
@@ -174,6 +178,13 @@ while (true) {
             GerenciadorDeCurtidas.listarCurtidas()
             break
         case '10':
+            try {
+                println "Digite o ID da empresa responsável (ou 0 se desconhecido):"
+                def empresaId = scanner.nextLine().toInteger()
+            } catch (Exception ex) {
+                println "ID não encontrado"
+                break
+            }
             println "Digite o nome da vaga:"
             def nome = scanner.nextLine()
             println "Digite a descrição da vaga:"
@@ -186,8 +197,6 @@ while (true) {
             def estado = scanner.nextLine()
             println "Digite o país:"
             def pais = scanner.nextLine()
-            println "Digite o ID da empresa responsável (ou 0 se desconhecido):"
-            def empresaId = scanner.nextLine().toInteger()
             println "Digite as competências da vaga (separadas por vírgula):"
             def competencias = scanner.nextLine().split(",")*.trim()
 

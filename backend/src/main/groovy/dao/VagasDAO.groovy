@@ -1,7 +1,12 @@
+package dao
+
 import groovy.sql.Sql
+import interfaces.IGenericDAO
+import model.Vagas
+
 import java.sql.SQLException
 
-class VagasDAO {
+class VagasDAO implements IGenericDAO<Vagas> {
     Sql sql
     CompetenciasDAO competenciasDAO
 
@@ -10,16 +15,18 @@ class VagasDAO {
         this.competenciasDAO = new CompetenciasDAO(sql)
     }
 
-    void inserir(Vagas v) {
+    @Override
+    def inserir(Vagas v) {
         try {
-            def vagaId = inserirVaga(v)
-            associarCompetencias(vagaId, v.competencias)
-            println "Vaga '${v.nome}' inserida com sucesso."
+            int vagaID = inserirVaga(v)
+            associacaoService.associarCompetencias("vagacompetencias", "vaga_id", vagaID, v.competencias)
+            println "Vaga '${v.nome}' inserido com sucesso."
         } catch (Exception ex) {
-            println "Erro ao inserir vaga '${v?.nome}': ${ex.message}"
+            println "Erro ao inserir vaga '${v.nome}': ${ex.message}"
         }
     }
 
+    @Override
     List<Vagas> listarTodos() {
         try {
             def rows = sql.rows("""
@@ -37,6 +44,7 @@ class VagasDAO {
                 """, [row.id]).collect { it.nome }
 
                 new Vagas(
+                        id: row.id,
                         nome: row.nome,
                         descricao: row.descricao,
                         endereco: row.endereco,
@@ -53,6 +61,7 @@ class VagasDAO {
         }
     }
 
+    @Override
     void atualizarCampo(int id, String campo, Object novoValor) {
         try {
             def camposPermitidos = ["nome", "descricao", "endereco", "cidade", "estado", "pais"]
@@ -66,6 +75,7 @@ class VagasDAO {
         }
     }
 
+    @Override
     void deletar(int id) {
         try {
             int removidos = sql.executeUpdate("DELETE FROM vagas WHERE id = ?", [id])
@@ -79,7 +89,7 @@ class VagasDAO {
         }
     }
 
-    private Long inserirVaga(Vagas v) {
+    private def inserirVaga(Vagas v) {
         try {
             def keys = sql.executeInsert("""
                 INSERT INTO vagas (nome, descricao, endereco, cidade, estado, pais, empresa_id)
@@ -88,22 +98,6 @@ class VagasDAO {
             return keys[0][0]
         } catch (Exception ex) {
             println "Erro ao inserir vaga '${v?.nome}': ${ex.message}"
-            throw ex
-        }
-    }
-
-    private void associarCompetencias(Long vagaId, List<String> competencias) {
-        competencias?.each { comp ->
-            try {
-                def compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [comp])?.id
-                if (!compId) {
-                    competenciasDAO.inserir(new Competencias(nome: comp))
-                    compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [comp]).id
-                }
-                sql.executeInsert("INSERT INTO vagacompetencias (vaga_id, competencia_id) VALUES (?, ?)", [vagaId, compId])
-            } catch (Exception ex) {
-                println "Erro ao associar competência '${comp}' à vaga ID ${vagaId}: ${ex.message}"
-            }
         }
     }
 }

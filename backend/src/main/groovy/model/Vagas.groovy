@@ -1,6 +1,9 @@
+package model
+
 import groovy.transform.ToString
 @ToString(includeNames = true)
 class Vagas {
+    Integer id
     String nome
     String descricao
     String endereco
