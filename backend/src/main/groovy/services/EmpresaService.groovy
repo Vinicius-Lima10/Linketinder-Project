@@ -15,18 +15,6 @@ class EmpresaService {
         this.dao = new EmpresaDAO(sql)
     }
 
-    private static def executarComDAO(Closure operacao) {
-        try {
-            return Conexao.withConnection { sql ->
-                def dao = new EmpresaDAO(sql)
-                return operacao(dao)
-            }
-        } catch (Exception e) {
-            println "Erro de conexão ou operação no banco: ${e.message}"
-            return null
-        }
-    }
-
     static void adicionarEmpresa(Empresa empresa) {
         executarComDAO { dao ->
             dao.inserir(empresa)
@@ -50,6 +38,17 @@ class EmpresaService {
     static void atualizarCampo(int id, String campo, Object novoValor) {
         executarComDAO { dao ->
             dao.atualizarCampo(id, campo, novoValor)
+        }
+    }
+
+    private static def executarComDAO(Closure operacao) {
+        try {
+            return Conexao.withConnection { sql ->
+                def dao = new EmpresaDAO(sql)
+                return operacao(dao)
+            }
+        } catch (Exception e) {
+            println "${e.message}"
         }
     }
 }

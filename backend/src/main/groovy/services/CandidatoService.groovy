@@ -42,7 +42,6 @@ class CandidatoService {
             }
         } catch (Exception ex) {
             println "Erro no serviço de candidato: ${ex.message}"
-            return null
         }
     }
 }

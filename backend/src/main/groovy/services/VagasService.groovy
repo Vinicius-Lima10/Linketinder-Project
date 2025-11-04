@@ -7,44 +7,34 @@ import model.Vagas
 class VagasService {
 
     static void adicionarVaga(Vagas vaga) {
-        try {
-            if (!vaga?.nome || !vaga?.descricao) {
-                println "Nome e descrição são obrigatórios."
-                return
-            }
-
-            Conexao.withConnection { sql ->
-                def dao = new VagasDAO(sql)
-                dao.inserir(vaga)
-            }
-
+        executarComDAO { dao ->
+            dao.inserir(vaga)
             println "Vaga adicionada com sucesso."
-        } catch (Exception ex) {
-            println "Erro ao adicionar vaga: ${ex.message}"
         }
     }
 
     static List<Vagas> listarVagas() {
-        try {
-            Conexao.withConnection { sql ->
-                def dao = new VagasDAO(sql)
-                return dao.listarTodos()
-            }
-        } catch (Exception ex) {
-            println "Erro ao listar vagas: ${ex.message}"
-            return []
-        }
+        return executarComDAO { dao ->
+            dao.listarTodos()
+        } ?: []
     }
 
     static void removerVaga(int id) {
-        try {
-            Conexao.withConnection { sql ->
-                def dao = new VagasDAO(sql)
-                dao.deletar(id)
-            }
-        } catch (Exception ex) {
-            println "Erro ao remover vaga: ${ex.message}"
+        executarComDAO { dao ->
+            dao.deletar(id)
+            println "Vaga removida com sucesso."
         }
     }
 
+
+    private static <T> T executarComDAO(Closure<T> operacao) {
+        try {
+            return Conexao.withConnection { sql ->
+                def dao = new VagasDAO(sql)
+                return operacao(dao)
+            }
+        } catch (Exception ex) {
+            println "${ex.message}"
+        }
+    }
 }

@@ -16,7 +16,7 @@ class MatchDAO {
         """, [idEmpresa, idCandidato, idVaga]
     }
 
-    List<Map> listarMatches() {
+    def listarMatches() {
         sql.rows("SELECT * FROM historico_match")
     }
 }

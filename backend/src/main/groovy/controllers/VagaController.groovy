@@ -19,12 +19,10 @@ class VagaController {
             Conexao.withConnection { sql ->
                 def empresaService = new EmpresaService(sql)
                 def empresa = empresaService.listarEmpresas().find { it.cnpj == cnpj }
-
                 if (!empresa) {
                     println "Nenhuma empresa encontrada com o CNPJ '${cnpj}'."
                     return
                 }
-
                 empresaId = empresa.id
             }
 

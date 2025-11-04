@@ -15,7 +15,6 @@ class CurtidaService {
                 println "Dados inválidos."
                 return
             }
-
             curtidaDAO.registrarCurtidaCandidato(candidato.id, vaga.id)
             println "${candidato.nome} curtiu a vaga ${vaga.nome}"
 
@@ -56,7 +55,6 @@ class CurtidaService {
             }
         } catch (Exception ex) {
             println "Erro no serviço de curtidas: ${ex.message}"
-            return null
         }
     }
 }
