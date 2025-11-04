@@ -4,8 +4,6 @@ import groovy.sql.Sql
 import interfaces.IGenericDAO
 import model.Empresa
 
-import java.sql.SQLException
-
 class EmpresaDAO implements IGenericDAO<Empresa> {
     Sql sql
 
@@ -16,13 +14,12 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
     @Override
     def inserir(Empresa e) {
         try {
-            sql.execute """
+            sql.executeInsert("""
                 INSERT INTO empresas (nome, cnpj, email, senha, pais, estado, cep, descricao)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            """, [e.nome, e.cnpj, e.email, e.senha, e.pais, e.estado, e.cep, e.descricao]
-            println "Empresa inserida com sucesso."
+            """, [e.nome, e.cnpj, e.email, e.senha, e.pais, e.estado, e.cep, e.descricao])
         } catch (Exception ex) {
-            println "Erro ao inserir empresa: ${ex.message}"
+            println "Erro ao inserir empresa '${e.nome}': ${ex.message}"
         }
     }
 
@@ -30,6 +27,7 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
     List<Empresa> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM empresas")
+
             return rows.collect { row ->
                 new Empresa(
                         id: row.id,
@@ -57,7 +55,6 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
                 throw new IllegalArgumentException("Campo '${campo}' não é permitido para atualização.")
             }
             sql.executeUpdate("UPDATE empresas SET ${campo} = ? WHERE id = ?", [novoValor, id])
-            println "Campo '${campo}' atualizado com sucesso."
         } catch (Exception ex) {
             println "Erro ao atualizar empresa: ${ex.message}"
         }
@@ -67,11 +64,6 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
     void deletar(int id) {
         try {
             int removidos = sql.executeUpdate("DELETE FROM empresas WHERE id = ?", [id])
-            if (removidos > 0) {
-                println "Empresa removida com sucesso."
-            } else {
-                println "Nenhuma empresa encontrada com o ID ${id}."
-            }
         } catch (Exception ex) {
             println "Erro ao deletar empresa: ${ex.message}"
         }

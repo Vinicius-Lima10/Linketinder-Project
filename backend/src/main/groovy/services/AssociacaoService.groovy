@@ -17,35 +17,40 @@ class AssociacaoService {
         this.formacaoDAO = new FormacaoDAO(sql)
     }
 
-    void associarCompetencias(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> competencias) {
-        competencias?.each { nome ->
-            try {
-                def compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [nome])?.id
-                if (!compId) {
-                    compId = competenciasDAO.inserir(new Competencias(nome: nome))
-                }
-
-                sql.executeInsert("INSERT INTO ${tabelaAssociacao} (${colunaIdReferencia}, competencia_id) VALUES (?, ?)",
-                        [idReferencia, compId])
-            } catch (Exception ex) {
-                println "Erro ao associar competência '${nome}' em ${tabelaAssociacao}: ${ex.message}"
-            }
-        }
-    }
-
-
     void associarFormacoes(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> formacoes) {
         formacoes?.each { nome ->
             try {
                 def formId = sql.firstRow("SELECT id FROM formacoes WHERE nome = ?", [nome])?.id
                 if (!formId) {
-                    formId = formacaoDAO.inserir(new Formacao(nome: nome))
+                    def result = formacaoDAO.inserir(new Formacao(nome: nome))
+                    formId = (result instanceof List && result[0] instanceof List) ? result[0][0] : result
                 }
-
-                sql.executeInsert("INSERT INTO ${tabelaAssociacao} (${colunaIdReferencia}, formacao_id) VALUES (?, ?)",
-                        [idReferencia, formId])
+                sql.executeInsert(
+                        "INSERT INTO ${tabelaAssociacao} (${colunaIdReferencia}, formacao_id) VALUES (?, ?)".toString(),
+                        [idReferencia as Integer, formId as Integer]
+                )
             } catch (Exception ex) {
                 println "Erro ao associar formação '${nome}' em ${tabelaAssociacao}: ${ex.message}"
+            }
+        }
+    }
+
+    void associarCompetencias(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> competencias) {
+        competencias?.each { nome ->
+            try {
+                nome = nome.toString()
+                def compId = sql.firstRow("SELECT id FROM competencias WHERE nome = ?", [nome])?.id
+                if (!compId) {
+                    def result = competenciasDAO.inserir(new Competencias(nome: nome))
+                    compId = (result instanceof List && result[0] instanceof List) ? result[0][0] : result
+                }
+
+                sql.executeInsert(
+                        "INSERT INTO ${tabelaAssociacao} (${colunaIdReferencia}, competencia_id) VALUES (?, ?)".toString(),
+                        [idReferencia as Integer, compId as Integer]
+                )
+            } catch (Exception ex) {
+                println "Erro ao associar competência '${nome}' em ${tabelaAssociacao}: ${ex.message}"
             }
         }
     }

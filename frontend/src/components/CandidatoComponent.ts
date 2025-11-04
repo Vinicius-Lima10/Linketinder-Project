@@ -1,0 +1,26 @@
+import { Candidato } from "../models/Candidato";
+import { cadastrarCandidato, listarCandidatos } from "../services/CandidatoService";
+export function cadastrarCandidatoS() {
+  const form = document.getElementById("formCandidato") as HTMLFormElement;
+
+    const candidato: Candidato = {
+      nome: (document.getElementById("nomeCandidato") as HTMLInputElement).value,
+      sobrenome: (document.getElementById("sobrenomeCandidato") as HTMLInputElement).value.trim(),
+      cpf: (document.getElementById("cpf") as HTMLInputElement).value.trim(),
+      data_de_nascimento: (document.getElementById("dataNascimento") as HTMLInputElement).value,
+      email: (document.getElementById("email") as HTMLInputElement).value,
+      senha: (document.getElementById("password") as HTMLInputElement).value,
+      estado: (document.getElementById("estado") as HTMLInputElement).value,
+      pais: (document.getElementById("pais") as HTMLInputElement).value,
+      cep: (document.getElementById("cep") as HTMLInputElement).value,
+      descricao: (document.getElementById("descricao") as HTMLInputElement).value,
+      formacao: (document.getElementById("formacao") as HTMLInputElement).value,
+      telefone: (document.getElementById("telefone") as HTMLInputElement).value,
+      linkedin: (document.getElementById("linkedin") as HTMLInputElement).value,
+      competencias: (document.getElementById("competencias") as HTMLInputElement)
+        .value.split(",").map(c => c.trim())
+    }
+
+    cadastrarCandidato(candidato)
+    form.reset()
+}

@@ -3,7 +3,6 @@ export type Candidato = {
     sobrenome: string
     cpf: string
     data_de_nascimento: string
-    idade: number
     email: string
     senha: string
     estado: string

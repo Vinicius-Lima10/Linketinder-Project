@@ -27,10 +27,8 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
 
             associacaoService.associarFormacoes("formacaocandidato", "candidato_id", candidatoId, c.formacao)
             associacaoService.associarCompetencias("candidatocompetencias", "candidato_id", candidatoId, c.competencias)
-            println "Candidato '${c.nome}' inserido com sucesso."
         } catch (Exception ex) {
             println "Erro ao inserir candidato '${c.nome}': ${ex.message}"
-            throw ex
         }
     }
 
@@ -38,7 +36,6 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
     List<Candidato> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM candidato")
-
             return rows.collect { r ->
                 new Candidato(
                         id: r.id,
@@ -75,7 +72,6 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
             }
 
             sql.executeUpdate("UPDATE candidato SET ${campo} = ? WHERE id = ?", [novoValor, id])
-            println "Campo '${campo}' atualizado com sucesso (ID: $id)."
         } catch (Exception ex) {
             println "Erro ao atualizar candidato ID ${id}: ${ex.message}"
         }
@@ -85,7 +81,6 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
     void deletar(int id) {
         try {
             sql.execute("DELETE FROM candidato WHERE id = ?", [id])
-            println "Candidato ID ${id} removido com sucesso."
         } catch (Exception ex) {
             println "Erro ao remover candidato ID ${id}: ${ex.message}"
         }

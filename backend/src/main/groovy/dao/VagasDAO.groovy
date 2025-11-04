@@ -3,16 +3,18 @@ package dao
 import groovy.sql.Sql
 import interfaces.IGenericDAO
 import model.Vagas
+import services.AssociacaoService
 
 import java.sql.SQLException
 
 class VagasDAO implements IGenericDAO<Vagas> {
     Sql sql
     CompetenciasDAO competenciasDAO
-
+    AssociacaoService associacaoService
     VagasDAO(Sql sql) {
         this.sql = sql
         this.competenciasDAO = new CompetenciasDAO(sql)
+        this.associacaoService = new AssociacaoService(sql)
     }
 
     @Override

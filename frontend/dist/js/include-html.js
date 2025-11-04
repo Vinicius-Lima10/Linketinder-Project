@@ -40,7 +40,6 @@ if (formCandidato) {
   formCandidato.addEventListener('submit', (e) => {
     e.preventDefault()
 
-    // limpa erros
     formCandidato.querySelectorAll(".form-control").forEach((input) => {
       limparErro(input)
     });
@@ -55,52 +54,26 @@ if (formCandidato) {
     } catch (err) {
       const mensagem = err.message;
       console.log(mensagem)
-
-      if (mensagem.includes("Nome")) {
-        const input = document.getElementById("nomeCandidato")
-        if (input) setErro(input, mensagem)
-      }
-
-      if (mensagem.includes("Sobrenome")) {
-        const input = document.getElementById("sobrenomeCandidato")
-        if (input) setErro(input, mensagem)
-      }
-        if (mensagem.includes("CPF")) {
-          const input = document.getElementById("cpf")
-          if (input) setErro(input, mensagem)
-        }
-      if (mensagem.includes("E-mail")) {
-        const input = document.getElementById("email")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("Telefone")) {
-        const input = document.getElementById("telefone")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("LinkedIn")) {
-        const input = document.getElementById("linkedin")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("CEP")) {
-        const input = document.getElementById("cep")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("Competência")) {
-        const input = document.getElementById("competencias")
-        if (input) setErro(input, mensagem)
+      const mensagens = err.message.split(" | ");
+      for (const mensagem of mensagens) {
+        if (mensagem.includes("Nome")) setErro(document.getElementById("nomeCandidato"), mensagem);
+        if (mensagem.includes("Sobrenome")) setErro(document.getElementById("sobrenomeCandidato"), mensagem);
+        if (mensagem.includes("CPF")) setErro(document.getElementById("cpf"), mensagem);
+        if (mensagem.includes("E-mail")) setErro(document.getElementById("email"), mensagem);
+        if (mensagem.includes("Telefone")) setErro(document.getElementById("telefone"), mensagem);
+        if (mensagem.includes("LinkedIn")) setErro(document.getElementById("linkedin"), mensagem);
+        if (mensagem.includes("CEP")) setErro(document.getElementById("cep"), mensagem);
+        if (mensagem.includes("Competência")) setErro(document.getElementById("competencias"), mensagem);
       }
     }
   });
 }
-
-
 
 const formEmpresa = container.querySelector('#formEmpresa')
 if (formEmpresa) {
   formEmpresa.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    // Limpar erros antes da validação
     formEmpresa.querySelectorAll(".form-control").forEach((input) => {
       limparErro(input);
     });
@@ -123,29 +96,31 @@ if (formEmpresa) {
       if (competenciasChoices) competenciasChoices.clearStore();
 
     } catch (err) {
-      const mensagem = err.message;
+      console.log(err.message);
 
-      console.log(mensagem)
+      const mensagens = err.message.split(" | ");
 
-      if (mensagem.includes("Nome")) {
-        const input = document.getElementById("nomeEmpresa")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("CNPJ")) {
-        const input = document.getElementById("cnpj")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("E-mail")) {
-        const input = document.getElementById("email")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("CEP")) {
-        const input = document.getElementById("cep")
-        if (input) setErro(input, mensagem)
-      }
-      if (mensagem.includes("Competência")) {
-        const input = document.getElementById("competencias")
-        if (input) setErro(input, mensagem)
+      for (const mensagem of mensagens) {
+        if (mensagem.includes("Nome")) {
+          const input = document.getElementById("nomeEmpresa");
+          if (input) setErro(input, mensagem);
+        }
+        if (mensagem.includes("CNPJ")) {
+          const input = document.getElementById("cnpj");
+          if (input) setErro(input, mensagem);
+        }
+        if (mensagem.includes("E-mail")) {
+          const input = document.getElementById("email");
+          if (input) setErro(input, mensagem);
+        }
+        if (mensagem.includes("CEP")) {
+          const input = document.getElementById("cep");
+          if (input) setErro(input, mensagem);
+        }
+        if (mensagem.includes("Competência")) {
+          const input = document.getElementById("competencias");
+          if (input) setErro(input, mensagem);
+        }
       }
     }
   });
@@ -163,7 +138,6 @@ if (formEmpresa) {
       });
     }
 
-    // Tabelas
     const tabelaCandidatos = container.querySelector('#tabelaCandidatos')
     if (tabelaCandidatos) {
       mostrarCandidatosAnonimos();

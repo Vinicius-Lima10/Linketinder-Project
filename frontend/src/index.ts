@@ -1,7 +1,7 @@
-import { cadastrarCandidatoS } from "./services/CandidatoService";
-import { cadastrarEmpresaS } from "./services/EmpresaService";
-import { mostrarCandidatosAnonimos } from "./services/EmpresaService";
-import { cadastrarVagaS, listarVagasS } from "./services/VagaService";
+import { cadastrarCandidatoS } from "./components/CandidatoComponent";
+import { cadastrarEmpresaS } from "./components/EmpresaComponent";
+import { mostrarCandidatosAnonimos } from "./components/EmpresaComponent";
+import { cadastrarVagaS, listarVagasS } from "./components/VagaComponent";
 
 (window as any).cadastrarCandidatoS = cadastrarCandidatoS;
 (window as any).cadastrarEmpresaS = cadastrarEmpresaS;

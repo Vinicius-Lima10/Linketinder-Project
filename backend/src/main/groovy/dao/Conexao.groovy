@@ -27,16 +27,15 @@ class Conexao {
         return instancia
     }
 
-    static void withConnection(Closure codeBlock) {
+    static def withConnection(Closure codeBlock) {
         def conexao = getInstancia().sql
         try {
-            codeBlock(conexao)
-        } catch (SQLException e) {
-            println "ERRO de DB: Falha ao conectar ou executar operação: ${e.message}"
+            return codeBlock(conexao)
+        } catch (Exception e) {
+            println "${e.message}"
             throw new RuntimeException("Erro de conexão ou operação de banco de dados.", e)
         }
     }
-
     Sql getSql() {
         return sql
     }

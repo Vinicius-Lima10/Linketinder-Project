@@ -1,4 +1,4 @@
-import { cadastrarVaga, listarVagas } from "../funcoes/VagasFuncoes";
+import { cadastrarVaga, listarVagas } from "../services/VagasService";
 import { Vaga } from "../models/Vagas";
 
 export function cadastrarVagaS() : void {

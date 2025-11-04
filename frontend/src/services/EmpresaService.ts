@@ -1,46 +1,37 @@
-import { Empresa } from "../models/Empresa";
-import { cadastrarEmpresa } from "../funcoes/EmpresaFuncoes";
-import { listarCandidatos } from "../funcoes/CandidatoFuncoes"
-import { Candidato } from "../models/Candidato";
-import { graficoCandidatos } from "./Grafico";
+import type { Empresa } from "../models/Empresa.js"
+import { validarCampo } from "../utils/regex"
 
-export function cadastrarEmpresaS() : void {
-  const form = document.getElementById("formEmpresa") as HTMLFormElement;
+let empresas: Empresa[] = []
 
-    const empresa: Empresa = {
-      nome: (document.getElementById("nomeEmpresa") as HTMLInputElement).value,
-      cnpj: (document.getElementById("cnpj") as HTMLInputElement).value,
-      email: (document.getElementById("email") as HTMLInputElement).value,
-      senha: (document.getElementById("password") as HTMLInputElement).value,
-      pais: (document.getElementById("pais") as HTMLInputElement).value,
-      estado: (document.getElementById("estado") as HTMLInputElement).value,
-      cep: (document.getElementById("cep") as HTMLInputElement).value,
-      descricao: (document.getElementById("descricao") as HTMLInputElement).value,
-      competencias: (document.getElementById("competencias") as HTMLInputElement)
-        .value.split(",").map(c => c.trim())
-    }
-    cadastrarEmpresa(empresa)
-    form.reset()
+export function cadastrarEmpresa(empresa: Empresa): void {
+  const erros: string[] = []
+
+  if (!validarCampo(empresa.nome, "nome")) erros.push("Nome da empresa inválido")
+  if (!validarCampo(empresa.cnpj, "cnpj")) erros.push("CNPJ inválido. Use o formato 00.000.000/0000-00")
+  if (!validarCampo(empresa.email, "email")) erros.push("E-mail inválido")
+  if (!validarCampo(empresa.cep, "cep")) erros.push("CEP inválido")
+
+  for (const c of empresa.competencias) {
+    if (!validarCampo(c, "competencia")) erros.push("Competência inválida: " + c)
+  }
+
+  if (erros.length > 0) throw new Error(erros.join(" | "))
+  empresas.push(empresa)
+}
+export function listarEmpresas() : Empresa[] {
+    return empresas
 }
 
-export function mostrarCandidatosAnonimos() : void {
-  const candidatos = listarCandidatos()
-  if (candidatos.length != 0 ) {
-    const tabela = document.querySelector<HTMLTableSectionElement>("#tabelaCandidatos tbody")!
-    tabela.innerHTML = ""
-    candidatos.forEach((candidato, index) => {
-      const row = document.createElement("tr")
+export function mostrarEmpresa(nome: string): Empresa | string {
+    const Empresa = empresas.find(c => c.nome === nome)
+    return Empresa ? Empresa : "Usuário não encontrado"
+}
 
-      row.innerHTML = `
-        <td>Candidato ${index + 1}</td>
-        <td>${candidato.formacao ?? "Não informado"}</td>
-        <td>${candidato.competencias.join(", ")}</td>
-     `
-      tabela.appendChild(row)
-    })
-    graficoCandidatos(candidatos)
-  } else {
-    const tabela = document.querySelector<HTMLTableSectionElement>("#tabelaCandidatos")!
-    tabela.innerHTML = "<h5 style='color:red'> Lista de Candidatos irá aparecer aqui </h5>"
-  }
+export function deletarEmpresa(nome: string): boolean {
+    const index = empresas.findIndex(c => c.nome === nome)
+    if (index !== -1) {
+        empresas.splice(index, 1)
+        return true
+    }
+    return false
 }

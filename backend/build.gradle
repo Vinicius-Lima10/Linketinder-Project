@@ -18,6 +18,9 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:2.3-groovy-4.0'
     testImplementation 'org.mockito:mockito-core:5.14.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.14.0'
+
+    // Adiciona engine JUnit4 pra garantir descoberta
+    testRuntimeOnly 'org.spockframework:spock-junit4:2.3-groovy-4.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 

@@ -63,18 +63,18 @@ class DaoSpec extends Specification {
     def "Testar CRUD do VagasDAO"() {
         Conexao.withConnection { sql ->
             def empresaDAO = new EmpresaDAO(sql)
-            def dummyEmpresa = new Empresa(
-                    nome: 'DummyVagaComp',
+            def fakeEmpresa = new Empresa(
+                    nome: 'Fake',
                     cnpj: '00.000.000/0000-00',
-                    email: 'dummy@vaga.com',
+                    email: 'fake@vaga.com',
                     senha: 'pass',
                     pais: 'US',
                     estado: 'NY',
                     cep: '10001',
-                    descricao: 'Dummy for VagasDAO test'
+                    descricao: 'fake test'
             )
-            empresaDAO.inserir(dummyEmpresa)
-            def empresaId = empresaDAO.listarTodos().find { it.nome == 'DummyVagaComp' }.id
+            empresaDAO.inserir(fakeEmpresa)
+            def empresaId = empresaDAO.listarTodos().find { it.nome == 'Fake' }.id
 
             def vaga = new Vagas(
                     nome: 'Programador',
