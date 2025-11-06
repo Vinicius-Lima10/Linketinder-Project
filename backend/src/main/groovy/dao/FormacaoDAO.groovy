@@ -14,55 +14,38 @@ class FormacaoDAO implements IGenericDAO<Formacao> {
     }
 
     @Override
-    def inserir(Formacao f) {
+    def inserir(Formacao f) throws Exception{
         try {
             def keys = sql.executeInsert("INSERT INTO formacoes (nome) VALUES (?)", [f.nome])
-            println "Formação inserida com sucesso."
             return keys[0][0]
         } catch (Exception ex) {
-            println "Erro ao inserir formação: ${ex.message}"
-            return null
+            println "foi no formacaodao"
+            throw ex
         }
     }
 
     @Override
-    List<Formacao> listarTodos() {
+    List<Formacao> listarTodos() throws Exception{
         try {
             def rows = sql.rows("SELECT * FROM formacoes")
             return rows.collect { row ->
                 new Formacao(nome: row.nome)
             }
         } catch (Exception ex) {
-            println "Erro ao listar formações: ${ex.message}"
-            return []
+            throw ex
         }
     }
 
     @Override
-    void atualizarCampo(int id, String campo, Object novoValor) {
-        try {
-            def camposPermitidos = ["nome"]
-            if (!camposPermitidos.contains(campo)) {
-                throw new IllegalArgumentException("Campo '${campo}' não é permitido para atualização.")
-            }
-            sql.executeUpdate("UPDATE formacoes SET ${campo} = ? WHERE id = ?", [novoValor, id])
-            println "Campo '${campo}' atualizado com sucesso."
-        } catch (Exception ex) {
-            println "Erro ao atualizar formação: ${ex.message}"
-        }
+    void atualizarCampo(int id, String campo, Object novoValor) throws Exception{
     }
 
     @Override
-    void deletar(int id) {
+    void deletar(int id) throws Exception{
         try {
-            int removidos = sql.executeUpdate("DELETE FROM formacoes WHERE id = ?", [id])
-            if (removidos > 0) {
-                println "Formação removida com sucesso."
-            } else {
-                println "Nenhuma formação encontrada com o ID ${id}."
-            }
+            sql.execute("DELETE FROM formacoes WHERE id = ?", [id])
         } catch (Exception ex) {
-            println "Erro ao deletar formação: ${ex.message}"
+            throw ex
         }
     }
 }

@@ -7,35 +7,28 @@ import services.CurtidaService
 
 class CurtidaController {
 
-    static void candidatoCurteVaga(Candidato candidato, Vagas vaga) {
+    static Object candidatoCurteVaga(Candidato candidato, Vagas vaga) throws Exception{
         try {
             CurtidaService.candidatoCurteVaga(candidato, vaga)
         } catch (Exception e) {
-            println "Erro ao processar curtida do candidato: ${e.message}"
+            throw e
         }
     }
 
-    static void empresaCurteCandidato(Empresa empresa, Candidato candidato, Vagas vaga) {
+    static Object empresaCurteCandidato(Empresa empresa, Candidato candidato, Vagas vaga) throws Exception {
         try {
             CurtidaService.empresaCurteCandidato(empresa, candidato, vaga)
         } catch (Exception e) {
-            println "Erro ao processar curtida da empresa: ${e.message}"
+            throw e
         }
     }
 
-    static void listarCurtidas() {
+    static Object listarCurtidas() throws Exception{
         try {
-            def curtidas = CurtidaService.listarCurtidas()
-            if (curtidas.isEmpty()) {
-                println "Nenhuma curtida registrada."
-            } else {
-                println "\nCurtidas registradas:"
-                curtidas.each { c ->
-                    println c
-                }
-            }
+            def resultado = CurtidaService.listarCurtidas()
+            return resultado ?: []
         } catch (Exception e) {
-            println "Erro ao listar curtidas: ${e.message}"
+            throw e
         }
     }
 }

@@ -3,47 +3,47 @@ package dao
 import groovy.sql.Sql
 import interfaces.IGenericDAO
 import model.Vagas
-import services.AssociacaoService
-
-import java.sql.SQLException
 
 class VagasDAO implements IGenericDAO<Vagas> {
-    Sql sql
-    CompetenciasDAO competenciasDAO
-    AssociacaoService associacaoService
+
+    private final Sql sql
+    private final CompetenciasDAO competenciasDAO
+    private final AssociacaoDAO associacaoDAO
+
     VagasDAO(Sql sql) {
         this.sql = sql
         this.competenciasDAO = new CompetenciasDAO(sql)
-        this.associacaoService = new AssociacaoService(sql)
+        this.associacaoDAO = new AssociacaoDAO(sql)
     }
 
     @Override
-    def inserir(Vagas v) {
+    def inserir(Vagas vaga) throws Exception {
         try {
-            int vagaID = inserirVaga(v)
-            associacaoService.associarCompetencias("vagacompetencias", "vaga_id", vagaID, v.competencias)
-            println "Vaga '${v.nome}' inserido com sucesso."
-        } catch (Exception ex) {
-            println "Erro ao inserir vaga '${v.nome}': ${ex.message}"
+            int vagaID = inserirVaga(vaga)
+            associacaoDAO.associarCompetencias("vagacompetencias", "vaga_id", vagaID, vaga.competencias)
+        } catch (Exception e) {
+            throw e
         }
     }
 
     @Override
-    List<Vagas> listarTodos() {
+    List<Vagas> listarTodos() throws Exception {
         try {
-            def rows = sql.rows("""
+            List<Map> rows = sql.rows("""
                 SELECT v.*, e.nome AS empresa_nome
                 FROM vagas v
                 JOIN empresas e ON v.empresa_id = e.id
             """)
 
             return rows.collect { row ->
-                def comps = sql.rows("""
+                List<Map> compsRows = sql.rows("""
                     SELECT c.nome 
                     FROM competencias c
                     JOIN vagacompetencias vc ON c.id = vc.competencia_id
                     WHERE vc.vaga_id = ?
-                """, [row.id]).collect { it.nome }
+                """, [row.id])
+
+                List<String> comps = compsRows.collect { it.nome }
 
                 new Vagas(
                         id: row.id,
@@ -57,49 +57,44 @@ class VagasDAO implements IGenericDAO<Vagas> {
                         competencias: comps
                 )
             }
-        } catch (Exception ex) {
-            println "Erro ao listar vagas: ${ex.message}"
-            return []
+        } catch (Exception e) {
+            throw e
         }
     }
 
     @Override
-    void atualizarCampo(int id, String campo, Object novoValor) {
+    void atualizarCampo(int id, String campo, Object novoValor) throws Exception {
         try {
-            def camposPermitidos = ["nome", "descricao", "endereco", "cidade", "estado", "pais"]
+            List<String> camposPermitidos = ["nome", "descricao", "endereco", "cidade", "estado", "pais"]
             if (!camposPermitidos.contains(campo)) {
-                throw new IllegalArgumentException("Campo '${campo}' não é permitido para atualização.")
+                throw new Exception()
             }
+
             sql.executeUpdate("UPDATE vagas SET ${campo} = ? WHERE id = ?", [novoValor, id])
-            println "Campo '${campo}' da vaga ID ${id} atualizado com sucesso."
-        } catch (Exception ex) {
-            println "Erro ao atualizar vaga: ${ex.message}"
+        } catch (Exception e) {
+            throw e
         }
     }
 
     @Override
-    void deletar(int id) {
+    void deletar(int id) throws Exception {
         try {
-            int removidos = sql.executeUpdate("DELETE FROM vagas WHERE id = ?", [id])
-            if (removidos > 0) {
-                println "Vaga removida com sucesso."
-            } else {
-                println "Nenhuma vaga encontrada com o ID ${id}."
-            }
-        } catch (Exception ex) {
-            println "Erro ao deletar vaga: ${ex.message}"
+            sql.executeUpdate("DELETE FROM vagas WHERE id = ?", [id])
+        } catch (Exception e) {
+            throw e
         }
     }
 
-    private def inserirVaga(Vagas v) {
+    private int inserirVaga(Vagas vaga) throws Exception {
         try {
-            def keys = sql.executeInsert("""
+            List<List<Object>> keys = sql.executeInsert("""
                 INSERT INTO vagas (nome, descricao, endereco, cidade, estado, pais, empresa_id)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-            """, [v.nome, v.descricao, v.endereco, v.cidade, v.estado, v.pais, v.empresa_id])
-            return keys[0][0]
-        } catch (Exception ex) {
-            println "Erro ao inserir vaga '${v?.nome}': ${ex.message}"
+            """, [vaga.nome, vaga.descricao, vaga.endereco, vaga.cidade, vaga.estado, vaga.pais, vaga.empresa_id])
+
+            return (int) keys[0][0]
+        } catch (Exception e) {
+            throw e
         }
     }
 }

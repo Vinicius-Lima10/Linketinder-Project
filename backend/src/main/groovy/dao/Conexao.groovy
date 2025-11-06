@@ -14,7 +14,6 @@ class Conexao {
         this.sql = ConexaoFactory.criarConexao(tipoBanco, url, user, password)
     }
 
-
     static synchronized Conexao getInstancia(
             String tipoBanco = "postgresql",
             String url = "jdbc:postgresql://localhost:5432/linketinder",

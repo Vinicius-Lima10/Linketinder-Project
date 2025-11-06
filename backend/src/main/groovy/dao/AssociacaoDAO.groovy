@@ -1,23 +1,20 @@
-package services
-
-import dao.CompetenciasDAO
-import dao.FormacaoDAO
+package dao
 import groovy.sql.Sql
 import model.Competencias
 import model.Formacao
 
-class AssociacaoService {
+class AssociacaoDAO {
     Sql sql
     CompetenciasDAO competenciasDAO
     FormacaoDAO formacaoDAO
 
-    AssociacaoService(Sql sql) {
+    AssociacaoDAO(Sql sql) {
         this.sql = sql
         this.competenciasDAO = new CompetenciasDAO(sql)
         this.formacaoDAO = new FormacaoDAO(sql)
     }
 
-    void associarFormacoes(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> formacoes) {
+    void associarFormacoes(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> formacoes) throws Exception{
         formacoes?.each { nome ->
             try {
                 def formId = sql.firstRow("SELECT id FROM formacoes WHERE nome = ?", [nome])?.id
@@ -30,12 +27,13 @@ class AssociacaoService {
                         [idReferencia as Integer, formId as Integer]
                 )
             } catch (Exception ex) {
-                println "Erro ao associar formação '${nome}' em ${tabelaAssociacao}: ${ex.message}"
+                println "foi no associcao"
+                throw ex
             }
         }
     }
 
-    void associarCompetencias(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> competencias) {
+    void associarCompetencias(String tabelaAssociacao, String colunaIdReferencia, int idReferencia, List<String> competencias) throws Exception{
         competencias?.each { nome ->
             try {
                 nome = nome.toString()
@@ -50,7 +48,8 @@ class AssociacaoService {
                         [idReferencia as Integer, compId as Integer]
                 )
             } catch (Exception ex) {
-                println "Erro ao associar competência '${nome}' em ${tabelaAssociacao}: ${ex.message}"
+                println "foi no associcao"
+                throw ex
             }
         }
     }

@@ -19,7 +19,7 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             """, [e.nome, e.cnpj, e.email, e.senha, e.pais, e.estado, e.cep, e.descricao])
         } catch (Exception ex) {
-            println "Erro ao inserir empresa '${e.nome}': ${ex.message}"
+            throw ex
         }
     }
 
@@ -42,8 +42,7 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
                 )
             }
         } catch (Exception ex) {
-            println "Erro ao listar empresas: ${ex.message}"
-            return []
+            throw ex
         }
     }
 
@@ -52,11 +51,11 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
         try {
             def camposPermitidos = ["nome", "cnpj", "email", "senha", "pais", "estado", "cep", "descricao"]
             if (!camposPermitidos.contains(campo)) {
-                throw new IllegalArgumentException("Campo '${campo}' não é permitido para atualização.")
+                throw new Exception()
             }
             sql.executeUpdate("UPDATE empresas SET ${campo} = ? WHERE id = ?", [novoValor, id])
         } catch (Exception ex) {
-            println "Erro ao atualizar empresa: ${ex.message}"
+            throw ex
         }
     }
 
@@ -65,7 +64,7 @@ class EmpresaDAO implements IGenericDAO<Empresa> {
         try {
             int removidos = sql.executeUpdate("DELETE FROM empresas WHERE id = ?", [id])
         } catch (Exception ex) {
-            println "Erro ao deletar empresa: ${ex.message}"
+            throw ex
         }
     }
 }

@@ -3,7 +3,6 @@ package dao
 import groovy.sql.Sql
 import interfaces.IGenericDAO
 import model.Candidato
-import services.AssociacaoService
 
 import java.sql.Date
 
@@ -11,13 +10,13 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
     Sql sql
     FormacaoDAO formacaoDAO
     CompetenciasDAO competenciasDAO
-    AssociacaoService associacaoService
+    AssociacaoDAO associacaoDAO
 
     CandidatoDAO(Sql sql) {
         this.sql = sql
         this.formacaoDAO = new FormacaoDAO(sql)
         this.competenciasDAO = new CompetenciasDAO(sql)
-        this.associacaoService = new AssociacaoService(sql)
+        this.associacaoDAO= new AssociacaoDAO(sql)
     }
 
     @Override
@@ -25,10 +24,10 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
         try {
             int candidatoId = inserirCandidato(c)
 
-            associacaoService.associarFormacoes("formacaocandidato", "candidato_id", candidatoId, c.formacao)
-            associacaoService.associarCompetencias("candidatocompetencias", "candidato_id", candidatoId, c.competencias)
+            associacaoDAO.associarFormacoes("formacaocandidato", "candidato_id", candidatoId, c.formacao)
+            associacaoDAO.associarCompetencias("candidatocompetencias", "candidato_id", candidatoId, c.competencias)
         } catch (Exception ex) {
-            println "Erro ao inserir candidato '${c.nome}': ${ex.message}"
+            throw ex
         }
     }
 
@@ -55,8 +54,7 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
                 )
             }
         } catch (Exception ex) {
-            println "Erro ao listar candidatos: ${ex.message}"
-            return []
+            throw ex
         }
     }
 
@@ -73,7 +71,7 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
 
             sql.executeUpdate("UPDATE candidato SET ${campo} = ? WHERE id = ?", [novoValor, id])
         } catch (Exception ex) {
-            println "Erro ao atualizar candidato ID ${id}: ${ex.message}"
+            throw ex
         }
     }
 
@@ -82,7 +80,7 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
         try {
             sql.execute("DELETE FROM candidato WHERE id = ?", [id])
         } catch (Exception ex) {
-            println "Erro ao remover candidato ID ${id}: ${ex.message}"
+            throw ex
         }
     }
 

@@ -5,46 +5,46 @@ import services.CandidatoService
 
 class CandidatoController {
 
-    static void adicionarCandidato(Candidato candidato) {
+    static void adicionarCandidato(Candidato candidato) throws Exception{
         try {
-            CandidatoService.adicionarCandidato(candidato)
-            println "Candidato '${candidato.nome}' cadastrado com sucesso!"
+             CandidatoService.adicionarCandidato(candidato)
         } catch (Exception e) {
-            println "Erro ao cadastrar candidato: ${e.message}"
+            throw e
         }
     }
 
-    static void listarCandidatos() {
-        def lista = CandidatoService.listarCandidatos()
-        if (lista.isEmpty()) {
-            println "Nenhum candidato cadastrado."
-        } else {
-            println "\n Lista de candidatos:"
-            lista.each { c ->
-                println "• ${c.nome} ${c.sobrenome} ${c.cpf} - ${c.estado}, ${c.pais}"
-            }
+    static List<Candidato> listarCandidatos() throws Exception {
+        try {
+            return CandidatoService.listarCandidatos()
+        } catch (Exception e) {
+            throw e
         }
     }
-    static void removerCandidato(int id) {
+
+    static void removerCandidato(int id) throws Exception {
         try {
             CandidatoService.removerCandidato(id)
-            println "Candidato ID ${id} removido com sucesso."
         } catch (Exception e) {
-            println "Erro ao remover candidato: ${e.message}"
+            throw e
         }
     }
 
-    static void removerCandidatoPorCPF(String cpf) {
-        def candidato = buscarPorCPF(cpf)
-        if (candidato) {
+    static void removerCandidatoPorCPF(String cpf) throws Exception{
+        try {
+            def candidato = buscarPorCPF(cpf)
             CandidatoService.removerCandidato(candidato.id)
-        } else {
-            println "Nenhum candidato encontrado com cpf ${cpf}"
+        } catch (Exception e) {
+            throw e
         }
     }
 
-    static def buscarPorCPF(String cpf) {
-        def lista = CandidatoService.listarCandidatos()
-        return lista.find { it.cpf == cpf }
+    static Candidato buscarPorCPF(String cpf) throws Exception{
+        try {
+            def resultado = CandidatoService.listarCandidatos()
+            def candidato = resultado.find { it.cpf == cpf }
+            return candidato
+        } catch (Exception e) {
+            throw e
+        }
     }
 }

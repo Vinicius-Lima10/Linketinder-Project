@@ -1,7 +1,5 @@
 package model
 
-import groovy.transform.ToString
-@ToString(includeNames = true)
 class Empresa extends Pessoa {
     Integer id
     String nome
@@ -14,16 +12,21 @@ class Empresa extends Pessoa {
     String descricao
 
     @Override
-    void exibirPerfil() {
-        println  """
-        Nome da empresa: $nome
-        CNPJ: $cnpj
-        Email corporativo: $email
-        País: $pais
-        Estado: $estado
-        CEP: $cep
-        Descrição da empresa: $descricao
-        
+    String toString() {
+        return """
+        ----------------------------------------
+        Empresa: ${nome}
+        CNPJ: ${cnpj}
+        Email: ${email}
+        Localização: ${estado}, ${pais}
+        CEP: ${cep}
+        Descrição: ${descricao}
+        ----------------------------------------
         """
+    }
+
+    @Override
+    void exibirPerfil() {
+        println toString()
     }
 }
