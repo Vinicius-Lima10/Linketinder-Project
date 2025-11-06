@@ -14,7 +14,7 @@ A proposta é criar uma aplicação simples, inspirada no **LinkedIn** e no **Ti
 3. Entre na pasta do projeto:
    cd backend/src/main/groovy
 4. Rode o main:
-    groovy Main.groovy
+    groovy VIew.Main.groovy
 
 ## Como executar o frontend
 1. Certifique-se de ter o Node.js instalado em sua máquina

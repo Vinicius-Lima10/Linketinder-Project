@@ -1,3 +1,5 @@
+package VIew
+
 import controllers.CandidatoController
 import controllers.CurtidaController
 import controllers.EmpresaController
