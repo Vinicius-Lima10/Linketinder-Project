@@ -7,6 +7,12 @@ import controllers.VagaController
 import model.Candidato
 import model.Empresa
 import model.Vagas
+import server.Server
+
+Thread.start {
+    Server.start()
+}
+
 
 println "=== Bem-vindo ao Linketinder ==="
 def scanner = new Scanner(System.in)
@@ -249,7 +255,9 @@ while (true) {
 
         case '0':
             println "Encerrando o programa..."
+            Server.stop()
             return
+
 
         default:
             println "Opção inválida, tente novamente."

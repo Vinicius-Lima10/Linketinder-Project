@@ -35,7 +35,27 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
     List<Candidato> listarTodos() {
         try {
             def rows = sql.rows("SELECT * FROM candidato")
+
             return rows.collect { r ->
+
+                def compsRows = sql.rows("""
+                SELECT c.nome 
+                FROM competencias c
+                JOIN candidatocompetencias cc ON c.id = cc.competencia_id
+                WHERE cc.candidato_id = ?
+            """, [r.id])
+
+                List<String> competencias = compsRows.collect { it.nome }
+
+                def formRows = sql.rows("""
+                SELECT f.nome
+                FROM formacoes f
+                JOIN formacaocandidato cf ON f.id = cf.formacao_id
+                WHERE cf.candidato_id = ?
+            """, [r.id])
+
+                List<String> formacoes = formRows.collect { it.nome }
+
                 new Candidato(
                         id: r.id,
                         nome: r.nome,
@@ -48,13 +68,15 @@ class CandidatoDAO implements IGenericDAO<Candidato> {
                         pais: r.pais,
                         cep: r.cep,
                         descricao: r.descricao,
-                        formacao: [],
-                        competencias: [],
-                        linkedin: r.linkedin
+                        telefone: r.telefone,
+                        linkedin: r.linkedin,
+                        competencias: competencias,
+                        formacao: formacoes
                 )
             }
-        } catch (Exception ex) {
-            throw ex
+
+        } catch (Exception e) {
+            throw e
         }
     }
 
