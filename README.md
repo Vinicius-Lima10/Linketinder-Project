@@ -28,3 +28,23 @@ A proposta é criar uma aplicação simples, inspirada no **LinkedIn** e no **Ti
 ## Banco de Dados
 Modelagem criada com dbdiagram e postgresql com pgAdmin 4
 <img width="1596" height="1051" alt="Untitled" src="https://github.com/user-attachments/assets/345188a6-2cd0-4fc1-a125-75ee74c92da3" />
+
+## Recursos aplicados na implementação da API REST
+
+Separação por camadas (Controller, Service e DAO)
+Cada parte cuida da sua responsabilidade. O Controller recebe a requisição, o Service trata a lógica e o DAO faz as operações no banco.
+
+CRUD básico para Candidatos, Empresas e Vagas
+Endpoints funcionando para criar, listar e remover registros.
+
+Rotas organizadas por entidade
+Cada controller possui o handleRequest, que identifica o método HTTP (GET, POST ou DELETE).
+
+Uso de JSON com Gson
+A troca de dados entre backend e frontend é feita via JSON utilizando a biblioteca Gson.
+
+Retorno com códigos HTTP apropriados
+Respostas como 200, 201, 400, 405 e 500 para indicar corretamente o resultado de cada operação.
+
+Servidor HTTP nativo (HttpExchange)
+Implementação feita usando o servidor nativo do Java, sem frameworks.
